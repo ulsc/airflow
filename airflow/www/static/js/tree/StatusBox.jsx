@@ -30,12 +30,21 @@ import { callModal } from '../dag';
 import InstanceTooltip from './InstanceTooltip';
 
 const StatusBox = ({
-  group, instance, containerRef, extraLinks = [], ...rest
+  group, instance, containerRef, extraLinks = [], onSelectInstance, ...rest
 }) => {
   const {
     executionDate, taskId, tryNumber = 0, operator, runId,
   } = instance;
-  const onClick = () => executionDate && callModal(taskId, executionDate, extraLinks, tryNumber, operator === 'SubDagOperator' || undefined, runId);
+
+  const onOpenModal = () => executionDate && callModal(taskId, executionDate, extraLinks, tryNumber, operator === 'SubDagOperator' || undefined, runId);
+  const onClick = () => {
+    if (group.isMapped) {
+      onSelectInstance(instance);
+    } else {
+      onSelectInstance({});
+      onOpenModal();
+    }
+  };
 
   // Fetch the corresponding column element and set its background color when hovering
   const onMouseOver = () => {
@@ -48,37 +57,39 @@ const StatusBox = ({
   };
 
   return (
-    <Tooltip
-      label={<InstanceTooltip instance={instance} group={group} />}
-      fontSize="md"
-      portalProps={{ containerRef }}
-      hasArrow
-      placement="top"
-      openDelay={400}
-    >
-      <Flex
-        p="1px"
-        my="1px"
-        mx="2px"
-        justifyContent="center"
-        alignItems="center"
-        onClick={onClick}
-        cursor={!group.children && 'pointer'}
-        data-testid="task-instance"
-        zIndex={1}
-        onMouseEnter={onMouseOver}
-        onMouseLeave={onMouseLeave}
-        {...rest}
+    <>
+      <Tooltip
+        label={<InstanceTooltip instance={instance} group={group} />}
+        fontSize="md"
+        portalProps={{ containerRef }}
+        hasArrow
+        placement="top"
+        openDelay={400}
       >
-        <Box
-          width="10px"
-          height="10px"
-          backgroundColor={stateColors[instance.state] || 'white'}
-          borderRadius="2px"
-          borderWidth={instance.state ? 0 : 1}
-        />
-      </Flex>
-    </Tooltip>
+        <Flex
+          p="1px"
+          my="1px"
+          mx="2px"
+          justifyContent="center"
+          alignItems="center"
+          onClick={onClick}
+          cursor={!group.children && 'pointer'}
+          data-testid="task-instance"
+          zIndex={1}
+          onMouseEnter={onMouseOver}
+          onMouseLeave={onMouseLeave}
+          {...rest}
+        >
+          <Box
+            width="10px"
+            height="10px"
+            backgroundColor={stateColors[instance.state] || 'white'}
+            borderRadius="2px"
+            borderWidth={instance.state ? 0 : 1}
+          />
+        </Flex>
+      </Tooltip>
+    </>
   );
 };
 

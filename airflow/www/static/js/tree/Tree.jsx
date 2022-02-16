@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import {
   Table,
   Tbody,
@@ -28,17 +28,20 @@ import {
   Spinner,
   Text,
   Thead,
+  Flex,
 } from '@chakra-ui/react';
 
 import useTreeData from './useTreeData';
 import renderTaskRows from './renderTaskRows';
 import DagRuns from './dagRuns';
+import SidePanel from './SidePanel';
 
 const Tree = () => {
   const containerRef = useRef();
   const scrollRef = useRef();
   const { data: { groups = {}, dagRuns = [] }, isRefreshOn, onToggleRefresh } = useTreeData();
   const dagRunIds = dagRuns.map((dr) => dr.runId);
+  const [selectedInstance, setSelectedInstance] = useState({});
 
   useEffect(() => {
     // Set initial scroll to far right if it is scrollable
@@ -47,6 +50,13 @@ const Tree = () => {
       runsContainer.scrollBy(runsContainer.clientWidth, 0);
     }
   }, []);
+
+  const { runId, taskId } = selectedInstance;
+  const onSelectInstance = (newInstance) => (
+    (newInstance.runId === runId && newInstance.taskId === taskId)
+      ? setSelectedInstance({})
+      : setSelectedInstance(newInstance)
+  );
 
   return (
     <Box position="relative" ref={containerRef}>
@@ -59,17 +69,20 @@ const Tree = () => {
       </FormControl>
       <Text transform="rotate(-90deg)" position="absolute" left="-6px" top="130px">Runs</Text>
       <Text transform="rotate(-90deg)" position="absolute" left="-6px" top="190px">Tasks</Text>
-      <Box px="24px">
-        <Box position="relative" width="100%" overflowX="auto" ref={scrollRef}>
-          <Table>
+      <Box pl="24px">
+        <Flex position="relative" flexDirection="row" justifyContent="space-between" overflow="hidden">
+          <Table mr="24px" overflowX="auto" ref={scrollRef} height={0}>
             <Thead>
               <DagRuns containerRef={containerRef} />
             </Thead>
             <Tbody>
-              {renderTaskRows({ task: groups, containerRef, dagRunIds })}
+              {renderTaskRows({
+                task: groups, containerRef, onSelectInstance, dagRunIds,
+              })}
             </Tbody>
           </Table>
-        </Box>
+          <SidePanel isOpen={!!runId} instance={selectedInstance} />
+        </Flex>
       </Box>
     </Box>
   );

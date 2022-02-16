@@ -39,7 +39,7 @@ import { getMetaValue } from '../utils';
 const dagId = getMetaValue('dag_id');
 
 const renderTaskRows = ({
-  task, containerRef, level = 0, isParentOpen, dagRunIds,
+  task, containerRef, level = 0, isParentOpen, dagRunIds, onSelectInstance,
 }) => task.children.map((t) => (
   <Row
     key={t.id}
@@ -49,6 +49,7 @@ const renderTaskRows = ({
     prevTaskId={task.id}
     isParentOpen={isParentOpen}
     dagRunIds={dagRunIds}
+    onSelectInstance={onSelectInstance}
   />
 ));
 
@@ -85,7 +86,9 @@ const TaskName = ({
   </Box>
 );
 
-const TaskInstances = ({ task, containerRef, dagRunIds }) => (
+const TaskInstances = ({
+  task, containerRef, dagRunIds, onSelectInstance,
+}) => (
   <Flex justifyContent="flex-end">
     {dagRunIds.map((runId) => {
       // Check if an instance exists for the run, or return an empty box
@@ -98,6 +101,7 @@ const TaskInstances = ({ task, containerRef, dagRunIds }) => (
             containerRef={containerRef}
             extraLinks={task.extraLinks}
             group={task}
+            onSelectInstance={onSelectInstance}
           />
         )
         : <Box key={`${runId}-${task.id}`} width="18px" data-testid="blank-task" />;
@@ -107,7 +111,7 @@ const TaskInstances = ({ task, containerRef, dagRunIds }) => (
 
 const Row = (props) => {
   const {
-    task, containerRef, level, prevTaskId, isParentOpen = true, dagRunIds,
+    task, containerRef, level, prevTaskId, isParentOpen = true, dagRunIds, onSelectInstance,
   } = props;
   const isGroup = !!task.children;
 
@@ -162,7 +166,12 @@ const Row = (props) => {
         <Td width={0} p={0} borderBottom={0} />
         <Td p={0} align="right" _groupHover={{ backgroundColor: 'rgba(113, 128, 150, 0.1)' }} transition="background-color 0.2s" borderBottom={0}>
           <Collapse in={isFullyOpen}>
-            <TaskInstances dagRunIds={dagRunIds} task={task} containerRef={containerRef} />
+            <TaskInstances
+              dagRunIds={dagRunIds}
+              task={task}
+              containerRef={containerRef}
+              onSelectInstance={onSelectInstance}
+            />
           </Collapse>
         </Td>
       </Tr>
