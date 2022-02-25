@@ -21,29 +21,60 @@
 
 import React from 'react';
 import {
-  Box,
   chakra,
   Flex,
   Text,
+  useDisclosure,
+  CloseButton,
+  Button,
+  IconButton,
 } from '@chakra-ui/react';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 import { formatDateTime } from '../datetime_utils';
 
-const SidePanel = ({ instance: { runId, taskId, executionDate }, isOpen }) => (
-  <Box bg="gray.200" maxWidth={isOpen ? 300 : 0} minWidth={isOpen ? 300 : 0} transition="all 0.5s" position="relative" overflow="hidden">
-    <Flex right={isOpen ? 0 : -300} top={0} transition="right 0.5s, max-width 0.5s" width={300} flexDirection="column" m={2}>
-      <Text as="h4">
+const SidePanel = ({ instance: { runId, taskId, executionDate } }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  if (!isOpen) {
+    return (
+      <IconButton
+        ml={2}
+        icon={<MdKeyboardArrowLeft size={18} />}
+        aria-label="Open Details Panel"
+        onClick={onOpen}
+      />
+    );
+  }
+  const title = runId && taskId
+    ? (
+      <>
         <chakra.span>Task Instance: </chakra.span>
         <chakra.b>{taskId}</chakra.b>
         <chakra.span> at </chakra.span>
         <chakra.b>{formatDateTime(moment.utc(executionDate))}</chakra.b>
+      </>
+    )
+    : (
+      <chakra.span>Dag Details: </chakra.span>
+    );
+
+  return (
+    <Flex bg="gray.200" maxWidth={300} minWidth={300} flexDirection="column" p={3}>
+      <IconButton
+        ml={2}
+        icon={<MdKeyboardArrowRight size={18} />}
+        aria-label="Close Details Panel"
+        onClick={onClose}
+      />
+      <Text as="h4">
+        {title}
       </Text>
       <Text>
         {/* eslint-disable-next-line max-len */}
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nunc vel risus commodo viverra maecenas accumsan. Ut porttitor leo a diam sollicitudin tempor id eu. Molestie at elementum eu facilisis sed odio morbi quis commodo. Facilisis leo vel fringilla est ullamcorper eget nulla facilisi etiam. Est sit amet facilisis magna etiam tempor orci eu. Id semper risus in hendrerit gravida rutrum. Ac odio tempor orci dapibus ultrices in iaculis nunc. Orci nulla pellentesque dignissim enim sit amet venenatis. Tellus at urna condimentum mattis pellentesque. Egestas purus viverra accumsan in nisl nisi scelerisque. Quisque egestas diam in arcu.
       </Text>
     </Flex>
-  </Box>
-);
+  );
+};
 
 export default SidePanel;

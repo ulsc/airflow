@@ -24,9 +24,10 @@ import {
   Flex,
   Box,
   Tooltip,
+  useTheme,
 } from '@chakra-ui/react';
 
-import { callModal } from '../dag';
+// import { callModal } from '../dag';
 import InstanceTooltip from './InstanceTooltip';
 
 const StatusBox = ({
@@ -35,21 +36,19 @@ const StatusBox = ({
   const {
     executionDate, taskId, tryNumber = 0, operator, runId,
   } = instance;
+  const { colors } = useTheme();
+  const hoverBlue = `${colors.blue[100]}50`;
 
-  const onOpenModal = () => executionDate && callModal(taskId, executionDate, extraLinks, tryNumber, operator === 'SubDagOperator' || undefined, runId);
-  const onClick = () => {
-    if (group.isMapped) {
-      onSelectInstance(instance);
-    } else {
-      onSelectInstance({});
-      onOpenModal();
-    }
+  // const onOpenModal = () => executionDate && callModal(taskId, executionDate, extraLinks, tryNumber, operator === 'SubDagOperator' || undefined, runId);
+  const onClick = (e) => {
+    e.stopPropagation();
+    onSelectInstance(instance);
   };
 
   // Fetch the corresponding column element and set its background color when hovering
   const onMouseOver = () => {
     [...containerRef.current.getElementsByClassName(`js-${runId}`)]
-      .forEach((e) => { e.style.backgroundColor = 'rgba(113, 128, 150, 0.1)'; });
+      .forEach((e) => { e.style.backgroundColor = hoverBlue; });
   };
   const onMouseLeave = () => {
     [...containerRef.current.getElementsByClassName(`js-${runId}`)]

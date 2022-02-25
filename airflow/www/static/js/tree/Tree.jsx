@@ -60,7 +60,7 @@ const Tree = () => {
 
   return (
     <Box position="relative" ref={containerRef}>
-      <FormControl display="flex" alignItems="center" justifyContent="flex-end" width="100%">
+      <FormControl display="flex" alignItems="center" justifyContent="flex-end" width="100%" mb={2}>
         {isRefreshOn && <Spinner color="blue.500" speed="1s" mr="4px" />}
         <FormLabel htmlFor="auto-refresh" mb={0} fontSize="12px" fontWeight="normal">
           Auto-refresh
@@ -69,19 +69,21 @@ const Tree = () => {
       </FormControl>
       <Text transform="rotate(-90deg)" position="absolute" left="-6px" top="130px">Runs</Text>
       <Text transform="rotate(-90deg)" position="absolute" left="-6px" top="190px">Tasks</Text>
-      <Box pl="24px">
+      <Box pl="24px" height="100%" onClick={() => setSelectedInstance({})}>
         <Flex position="relative" flexDirection="row" justifyContent="space-between" overflow="hidden">
-          <Table mr="24px" overflowX="auto" ref={scrollRef} height={0}>
-            <Thead>
-              <DagRuns containerRef={containerRef} />
-            </Thead>
-            <Tbody>
-              {renderTaskRows({
-                task: groups, containerRef, onSelectInstance, dagRunIds,
-              })}
-            </Tbody>
-          </Table>
-          <SidePanel isOpen={!!runId} instance={selectedInstance} />
+          <Box mr="12px" pb="12px" overflowX="auto" ref={scrollRef} maxWidth="60vw">
+            <Table height={0}>
+              <Thead>
+                <DagRuns containerRef={containerRef} selectedInstance={selectedInstance} />
+              </Thead>
+              <Tbody>
+                {renderTaskRows({
+                  task: groups, containerRef, onSelectInstance, selectedInstance, dagRunIds,
+                })}
+              </Tbody>
+            </Table>
+          </Box>
+          <SidePanel instance={selectedInstance} />
         </Flex>
       </Box>
     </Box>

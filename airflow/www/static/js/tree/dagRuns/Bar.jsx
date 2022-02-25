@@ -26,6 +26,7 @@ import {
   Tooltip,
   Text,
   VStack,
+  useTheme,
 } from '@chakra-ui/react';
 import { MdPlayArrow } from 'react-icons/md';
 
@@ -35,13 +36,16 @@ import { callModalDag } from '../../dag';
 const BAR_HEIGHT = 100;
 
 const DagRunBar = ({
-  run, max, index, totalRuns, containerRef,
+  run, max, index, totalRuns, containerRef, selectedInstance,
 }) => {
+  const { colors } = useTheme();
+  const hoverBlue = `${colors.blue[100]}50`;
   let highlightHeight = '100%';
   if (containerRef && containerRef.current) {
     const table = containerRef.current.getElementsByTagName('tbody')[0];
     highlightHeight = table.offsetHeight + BAR_HEIGHT;
   }
+  const isSelected = run.runId === selectedInstance.runId;
   return (
     <Box position="relative">
       <Flex
@@ -93,7 +97,8 @@ const DagRunBar = ({
         top="1px"
         height={highlightHeight}
         className={`js-${run.runId}`}
-        _peerHover={{ backgroundColor: 'rgba(113, 128, 150, 0.1)' }}
+        bg={isSelected ? 'blue.100' : undefined}
+        _peerHover={!isSelected && { backgroundColor: hoverBlue }}
         zIndex={0}
         transition="background-color 0.2s"
       />
