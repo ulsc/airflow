@@ -25,8 +25,6 @@ import {
   Flex,
   Text,
   useDisclosure,
-  CloseButton,
-  Button,
   IconButton,
 } from '@chakra-ui/react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
@@ -38,30 +36,42 @@ const SidePanel = ({ instance: { runId, taskId, executionDate } }) => {
   if (!isOpen) {
     return (
       <IconButton
-        ml={2}
+        m={2}
         icon={<MdKeyboardArrowLeft size={18} />}
         aria-label="Open Details Panel"
         onClick={onOpen}
       />
     );
   }
-  const title = runId && taskId
-    ? (
+  let title = '';
+  if (runId && taskId) {
+    title = (
       <>
         <chakra.span>Task Instance: </chakra.span>
         <chakra.b>{taskId}</chakra.b>
         <chakra.span> at </chakra.span>
         <chakra.b>{formatDateTime(moment.utc(executionDate))}</chakra.b>
       </>
-    )
-    : (
+    );
+  } else if (runId) {
+    title = (
+      <>
+        <chakra.span>Dag Run: </chakra.span>
+        <chakra.b>{runId}</chakra.b>
+        <chakra.span> at </chakra.span>
+        <chakra.b>{formatDateTime(moment.utc(executionDate))}</chakra.b>
+      </>
+    );
+  } else {
+    title = (
       <chakra.span>Dag Details: </chakra.span>
     );
+  }
 
   return (
-    <Flex bg="gray.200" maxWidth={300} minWidth={300} flexDirection="column" p={3}>
+    <Flex bg="gray.200" maxWidth={isOpen ? '50%' : 0} minWidth={isOpen ? 300 : 0} flexDirection="column" p={3}>
       <IconButton
-        ml={2}
+        m={2}
         icon={<MdKeyboardArrowRight size={18} />}
         aria-label="Close Details Panel"
         onClick={onClose}

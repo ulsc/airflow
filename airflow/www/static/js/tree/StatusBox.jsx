@@ -27,32 +27,30 @@ import {
   useTheme,
 } from '@chakra-ui/react';
 
-// import { callModal } from '../dag';
 import InstanceTooltip from './InstanceTooltip';
 
 const StatusBox = ({
-  group, instance, containerRef, extraLinks = [], onSelectInstance, ...rest
+  group, instance, containerRef, onSelectInstance, selectedInstance, ...rest
 }) => {
-  const {
-    executionDate, taskId, tryNumber = 0, operator, runId,
-  } = instance;
+  const { runId } = instance;
   const { colors } = useTheme();
   const hoverBlue = `${colors.blue[100]}50`;
 
-  // const onOpenModal = () => executionDate && callModal(taskId, executionDate, extraLinks, tryNumber, operator === 'SubDagOperator' || undefined, runId);
-  const onClick = (e) => {
-    e.stopPropagation();
-    onSelectInstance(instance);
-  };
-
   // Fetch the corresponding column element and set its background color when hovering
   const onMouseOver = () => {
-    [...containerRef.current.getElementsByClassName(`js-${runId}`)]
-      .forEach((e) => { e.style.backgroundColor = hoverBlue; });
+    if (selectedInstance.runId !== runId) {
+      [...containerRef.current.getElementsByClassName(`js-${runId}`)]
+        .forEach((e) => { e.style.backgroundColor = hoverBlue; });
+    }
   };
   const onMouseLeave = () => {
     [...containerRef.current.getElementsByClassName(`js-${runId}`)]
       .forEach((e) => { e.style.backgroundColor = null; });
+  };
+
+  const onClick = (e) => {
+    e.stopPropagation();
+    onSelectInstance(instance);
   };
 
   return (

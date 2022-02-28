@@ -85,24 +85,26 @@ const TaskName = ({
 );
 
 const TaskInstances = ({
-  task, containerRef, dagRunIds, onSelectInstance,
+  task, containerRef, dagRunIds, onSelectInstance, selectedInstance,
 }) => (
   <Flex justifyContent="flex-end">
     {dagRunIds.map((runId) => {
       // Check if an instance exists for the run, or return an empty box
       const instance = task.instances.find((gi) => gi.runId === runId);
+      const key = `${runId}-${task.id}`;
       return instance
         ? (
           <StatusBox
-            key={`${runId}-${task.id}`}
+            key={key}
             instance={instance}
             containerRef={containerRef}
             extraLinks={task.extraLinks}
             group={task}
             onSelectInstance={onSelectInstance}
+            selectedInstance={selectedInstance}
           />
         )
-        : <Box key={`${runId}-${task.id}`} width="16px" data-testid="blank-task" />;
+        : <Box key={key} width="16px" data-testid="blank-task" />;
     })}
   </Flex>
 );
@@ -185,6 +187,7 @@ const Row = (props) => {
               task={task}
               containerRef={containerRef}
               onSelectInstance={onSelectInstance}
+              selectedInstance={selectedInstance}
             />
           </Collapse>
         </Td>

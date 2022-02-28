@@ -36,7 +36,7 @@ const DurationTick = ({ children, ...rest }) => (
   </Text>
 );
 
-const DagRuns = ({ containerRef, selectedInstance }) => {
+const DagRuns = ({ containerRef, selectedInstance, onSelectInstance }) => {
   const { data: { dagRuns = [] } } = useTreeData();
   const durations = [];
   const runs = dagRuns.map((dagRun) => {
@@ -98,6 +98,7 @@ const DagRuns = ({ containerRef, selectedInstance }) => {
               totalRuns={runs.length}
               containerRef={containerRef}
               selectedInstance={selectedInstance}
+              onSelectInstance={onSelectInstance}
             />
           ))}
         </Flex>

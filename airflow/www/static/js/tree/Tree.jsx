@@ -74,7 +74,11 @@ const Tree = () => {
           <Box mr="12px" pb="12px" overflowX="auto" ref={scrollRef} maxWidth="60vw">
             <Table height={0}>
               <Thead>
-                <DagRuns containerRef={containerRef} selectedInstance={selectedInstance} />
+                <DagRuns
+                  containerRef={containerRef}
+                  selectedInstance={selectedInstance}
+                  onSelectInstance={onSelectInstance}
+                />
               </Thead>
               <Tbody>
                 {renderTaskRows({

@@ -31,12 +31,11 @@ import {
 import { MdPlayArrow } from 'react-icons/md';
 
 import DagRunTooltip from './Tooltip';
-import { callModalDag } from '../../dag';
 
 const BAR_HEIGHT = 100;
 
 const DagRunBar = ({
-  run, max, index, totalRuns, containerRef, selectedInstance,
+  run, max, index, totalRuns, containerRef, selectedInstance, onSelectInstance,
 }) => {
   const { colors } = useTheme();
   const hoverBlue = `${colors.blue[100]}50`;
@@ -53,14 +52,14 @@ const DagRunBar = ({
         alignItems="flex-end"
         justifyContent="center"
         mb="2px"
-        // py="2px"
         px="2px"
         mx="1px"
         cursor="pointer"
         width="14px"
         zIndex={1}
-        onClick={() => {
-          callModalDag({ execution_date: run.executionDate, dag_id: run.dagId, run_id: run.runId });
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelectInstance(run);
         }}
         position="relative"
         data-peer
