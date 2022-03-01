@@ -30,7 +30,7 @@ import {
 import InstanceTooltip from './InstanceTooltip';
 
 const StatusBox = ({
-  group, instance, containerRef, onSelectInstance, selectedInstance, ...rest
+  group, instance, containerRef, onSelect, selected, ...rest
 }) => {
   const { runId } = instance;
   const { colors } = useTheme();
@@ -38,7 +38,7 @@ const StatusBox = ({
 
   // Fetch the corresponding column element and set its background color when hovering
   const onMouseEnter = () => {
-    if (selectedInstance.runId !== runId) {
+    if (selected.runId !== runId) {
       [...containerRef.current.getElementsByClassName(`js-${runId}`)]
         .forEach((e) => { e.style.backgroundColor = hoverBlue; });
     }
@@ -51,7 +51,7 @@ const StatusBox = ({
   const onClick = (e) => {
     e.stopPropagation();
     onMouseLeave();
-    onSelectInstance(instance);
+    onSelect(instance);
   };
 
   return (

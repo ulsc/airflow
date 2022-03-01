@@ -18,39 +18,14 @@
  */
 
 import React from 'react';
-import { Box, Text } from '@chakra-ui/react';
-import { MdPlayArrow } from 'react-icons/md';
+import {
+  Text,
+} from '@chakra-ui/react';
 
-import { formatDateTime, formatDuration } from '../../datetime_utils';
-
-const DagRunTooltip = ({
-  dagRun: {
-    state, duration, dataIntervalEnd, runType,
-  },
-}) => (
-  <Box fontSize="12px" py="2px">
-    <Text>
-      <Text as="strong">Status:</Text>
-      {' '}
-      {state || 'no status'}
-    </Text>
-    <Text whiteSpace="nowrap">
-      Run:
-      {' '}
-      {formatDateTime(dataIntervalEnd)}
-    </Text>
-    <Text>
-      Run Type:
-      {' '}
-      {runType === 'manual' && <MdPlayArrow style={{ display: 'inline' }} />}
-      {runType}
-    </Text>
-    <Text>
-      Duration:
-      {' '}
-      {formatDuration(duration)}
-    </Text>
-  </Box>
+const DagRun = () => (
+  <>
+    <Text>dag run details</Text>
+  </>
 );
 
-export default DagRunTooltip;
+export default DagRun;

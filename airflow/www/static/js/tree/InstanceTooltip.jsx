@@ -17,33 +17,16 @@
  * under the License.
  */
 
-/* global moment */
-
 import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
 
-import { formatDateTime, getDuration, formatDuration } from '../datetime_utils';
 import { finalStatesMap } from '../utils';
-
-const STATES = [
-  ['success', 0],
-  ['failed', 0],
-  ['upstream_failed', 0],
-  ['up_for_retry', 0],
-  ['up_for_reschedule', 0],
-  ['running', 0],
-  ['deferred', 0],
-  ['sensing', 0],
-  ['queued', 0],
-  ['scheduled', 0],
-  ['skipped', 0],
-  ['no_status', 0],
-];
+import { formatDateTime } from '../datetime_utils';
 
 const InstanceTooltip = ({
   group,
   instance: {
-    duration, operator, startDate, endDate, state, taskId, runId, mappedStates,
+    startDate, state, runId, mappedStates,
   },
 }) => {
   const isGroup = !!group.children;
@@ -93,25 +76,20 @@ const InstanceTooltip = ({
     });
   }
 
-  const taskIdTitle = isGroup ? 'Task Group Id: ' : 'Task Id: ';
-
   return (
-    <Box fontSize="12px" py="4px">
+    <Box fontSize="12px" py="2px">
       {group.tooltip && (
         <Text>{group.tooltip}</Text>
       )}
       <Text>
-        <Text as="strong">Status:</Text>
+        <Text as="strong">
+          {isGroup ? 'Overall ' : ''}
+          Status:
+        </Text>
         {' '}
         {state || 'no status'}
       </Text>
-      {isGroup && (
-        <>
-          <br />
-          <Text as="strong">Group Summary</Text>
-          {groupSummary}
-        </>
-      )}
+      {isGroup && groupSummary}
       {group.isMapped && (
         <>
           <br />
@@ -124,56 +102,11 @@ const InstanceTooltip = ({
           {mapSummary}
         </>
       )}
-      <br />
-      {/* <Text>
-        {taskIdTitle}
-        {taskId}
-      </Text> */}
-      {/* <Text whiteSpace="nowrap">
-        Run Id:
-        {' '}
-        {runId}
-      </Text> */}
-      {/* {operator && (
-      <Text>
-        Operator:
-        {' '}
-        {operator}
-      </Text>
-      )} */}
-      <Text>
-        Duration:
-        {' '}
-        {formatDuration(duration || getDuration(startDate, endDate))}
-      </Text>
-      <br />
-      {/* <Text as="strong">UTC</Text>
-      <Text>
-        Started:
-        {' '}
-        {startDate && formatDateTime(moment.utc(startDate))}
-      </Text>
-      <Text>
-        Ended:
-        {' '}
-        {endDate && formatDateTime(moment.utc(endDate))}
-      </Text>
-      <br />
-      <Text as="strong">
-        Local:
-        {' '}
-        {moment().format('Z')}
-      </Text>
       <Text>
         Started:
         {' '}
         {startDate && formatDateTime(startDate)}
       </Text>
-      <Text>
-        Ended:
-        {' '}
-        {endDate && formatDateTime(endDate)}
-      </Text> */}
     </Box>
   );
 };

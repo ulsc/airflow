@@ -40,7 +40,7 @@ import { getMetaValue } from '../utils';
 const dagId = getMetaValue('dag_id');
 
 const renderTaskRows = ({
-  task, containerRef, level = 0, isParentOpen, dagRunIds, onSelectInstance, selectedInstance,
+  task, containerRef, level = 0, isParentOpen, onSelect, selected, dagRunIds,
 }) => task.children.map((t) => (
   <Row
     key={t.id}
@@ -49,9 +49,9 @@ const renderTaskRows = ({
     containerRef={containerRef}
     prevTaskId={task.id}
     isParentOpen={isParentOpen}
+    onSelect={onSelect}
+    selected={selected}
     dagRunIds={dagRunIds}
-    onSelectInstance={onSelectInstance}
-    selectedInstance={selectedInstance}
   />
 ));
 
@@ -85,7 +85,7 @@ const TaskName = ({
 );
 
 const TaskInstances = ({
-  task, containerRef, dagRunIds, onSelectInstance, selectedInstance,
+  task, containerRef, dagRunIds, onSelect, selected,
 }) => (
   <Flex justifyContent="flex-end">
     {dagRunIds.map((runId) => {
@@ -99,8 +99,8 @@ const TaskInstances = ({
             instance={instance}
             containerRef={containerRef}
             group={task}
-            onSelectInstance={onSelectInstance}
-            selectedInstance={selectedInstance}
+            onSelect={onSelect}
+            selected={selected}
           />
         )
         : <Box key={key} width="16px" data-testid="blank-task" />;
@@ -115,14 +115,14 @@ const Row = (props) => {
     level,
     prevTaskId,
     isParentOpen = true,
+    onSelect,
+    selected,
     dagRunIds,
-    onSelectInstance,
-    selectedInstance,
   } = props;
   const { colors } = useTheme();
   const hoverBlue = `${colors.blue[100]}50`;
   const isGroup = !!task.children;
-  const isSelected = selectedInstance.taskId === task.id;
+  const isSelected = selected.taskId === task.id;
 
   const taskName = prevTaskId ? task.id.replace(`${prevTaskId}.`, '') : task.id;
 
@@ -185,8 +185,8 @@ const Row = (props) => {
               dagRunIds={dagRunIds}
               task={task}
               containerRef={containerRef}
-              onSelectInstance={onSelectInstance}
-              selectedInstance={selectedInstance}
+              onSelect={onSelect}
+              selected={selected}
             />
           </Collapse>
         </Td>

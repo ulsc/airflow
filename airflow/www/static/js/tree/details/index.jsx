@@ -18,39 +18,31 @@
  */
 
 import React from 'react';
-import { Box, Text } from '@chakra-ui/react';
-import { MdPlayArrow } from 'react-icons/md';
+import {
+  Flex,
+  Box,
+  Divider,
+} from '@chakra-ui/react';
 
-import { formatDateTime, formatDuration } from '../../datetime_utils';
+import Header from './Header';
+import TaskInstanceContent from './content/TaskInstance';
+import DagRunContent from './content/DagRun';
+import DagContent from './content/Dag';
 
-const DagRunTooltip = ({
-  dagRun: {
-    state, duration, dataIntervalEnd, runType,
-  },
+const Details = ({
+  selected,
+  onSelect,
 }) => (
-  <Box fontSize="12px" py="2px">
-    <Text>
-      <Text as="strong">Status:</Text>
-      {' '}
-      {state || 'no status'}
-    </Text>
-    <Text whiteSpace="nowrap">
-      Run:
-      {' '}
-      {formatDateTime(dataIntervalEnd)}
-    </Text>
-    <Text>
-      Run Type:
-      {' '}
-      {runType === 'manual' && <MdPlayArrow style={{ display: 'inline' }} />}
-      {runType}
-    </Text>
-    <Text>
-      Duration:
-      {' '}
-      {formatDuration(duration)}
-    </Text>
-  </Box>
+  <Flex borderLeftWidth="1px" flexDirection="column" p={3} flexGrow={1}>
+    <Header selected={selected} onSelect={onSelect} />
+    <Divider my={2} />
+    <Box>
+      {/* TODO: get full instance data from the API */}
+      {!selected.runId && !selected.taskId && <DagContent />}
+      {selected.runId && !selected.taskId && <DagRunContent />}
+      {selected.taskId && <TaskInstanceContent instance={selected} />}
+    </Box>
+  </Flex>
 );
 
-export default DagRunTooltip;
+export default Details;

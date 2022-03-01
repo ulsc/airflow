@@ -35,7 +35,7 @@ import DagRunTooltip from './Tooltip';
 const BAR_HEIGHT = 100;
 
 const DagRunBar = ({
-  run, max, index, totalRuns, containerRef, selectedInstance, onSelectInstance,
+  run, max, index, totalRuns, containerRef, selected, onSelect,
 }) => {
   const { colors } = useTheme();
   const hoverBlue = `${colors.blue[100]}50`;
@@ -44,7 +44,7 @@ const DagRunBar = ({
     const table = containerRef.current.getElementsByTagName('tbody')[0];
     highlightHeight = table.offsetHeight + BAR_HEIGHT;
   }
-  const isSelected = run.runId === selectedInstance.runId;
+  const isSelected = run.runId === selected.runId;
   return (
     <Box position="relative">
       <Flex
@@ -59,7 +59,7 @@ const DagRunBar = ({
         zIndex={1}
         onClick={(e) => {
           e.stopPropagation();
-          onSelectInstance(run);
+          onSelect(run);
         }}
         position="relative"
         data-peer

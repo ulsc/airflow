@@ -34,14 +34,15 @@ import {
 import useTreeData from './useTreeData';
 import renderTaskRows from './renderTaskRows';
 import DagRuns from './dagRuns';
-import SidePanel from './SidePanel';
+import Details from './details';
 
 const Tree = () => {
   const containerRef = useRef();
   const scrollRef = useRef();
   const { data: { groups = {}, dagRuns = [] }, isRefreshOn, onToggleRefresh } = useTreeData();
+  const [selected, setSelected] = useState({});
+
   const dagRunIds = dagRuns.map((dr) => dr.runId);
-  const [selectedInstance, setSelectedInstance] = useState({});
 
   useEffect(() => {
     // Set initial scroll to far right if it is scrollable
@@ -51,46 +52,42 @@ const Tree = () => {
     }
   }, []);
 
-  const { runId, taskId } = selectedInstance;
-  const onSelectInstance = (newInstance) => (
+  const { runId, taskId } = selected;
+  const onSelect = (newInstance) => (
     (newInstance.runId === runId && newInstance.taskId === taskId)
-      ? setSelectedInstance({})
-      : setSelectedInstance(newInstance)
+      ? setSelected({})
+      : setSelected(newInstance)
   );
 
   return (
-    <Box position="relative" ref={containerRef}>
-      <FormControl display="flex" alignItems="center" justifyContent="flex-end" width="100%" mb={2}>
-        {isRefreshOn && <Spinner color="blue.500" speed="1s" mr="4px" />}
-        <FormLabel htmlFor="auto-refresh" mb={0} fontSize="12px" fontWeight="normal">
-          Auto-refresh
-        </FormLabel>
-        <Switch id="auto-refresh" onChange={onToggleRefresh} isChecked={isRefreshOn} size="lg" />
-      </FormControl>
+    <Flex pl="24px" position="relative" flexDirection="row" justifyContent="space-between" ref={containerRef}>
       <Text transform="rotate(-90deg)" position="absolute" left="-6px" top="130px">Runs</Text>
       <Text transform="rotate(-90deg)" position="absolute" left="-6px" top="190px">Tasks</Text>
-      <Box pl="24px" height="100%" onClick={() => setSelectedInstance({})}>
-        <Flex position="relative" flexDirection="row" justifyContent="space-between" overflow="hidden">
-          <Box mr="12px" pb="12px" overflowX="auto" ref={scrollRef} maxWidth="60vw">
-            <Table height={0}>
-              <Thead>
-                <DagRuns
-                  containerRef={containerRef}
-                  selectedInstance={selectedInstance}
-                  onSelectInstance={onSelectInstance}
-                />
-              </Thead>
-              <Tbody>
-                {renderTaskRows({
-                  task: groups, containerRef, onSelectInstance, selectedInstance, dagRunIds,
-                })}
-              </Tbody>
-            </Table>
-          </Box>
-          <SidePanel instance={selectedInstance} />
-        </Flex>
+      <Box mr="12px" pb="12px" overflowX="auto" ref={scrollRef} maxWidth="300px" minWidth="300px" position="relative">
+        <FormControl display="flex" alignItems="center" justifyContent="flex-end" width="100%" mb={2}>
+          {isRefreshOn && <Spinner color="blue.500" speed="1s" mr="4px" />}
+          <FormLabel htmlFor="auto-refresh" mb={0} fontSize="12px" fontWeight="normal">
+            Auto-refresh
+          </FormLabel>
+          <Switch id="auto-refresh" onChange={onToggleRefresh} isChecked={isRefreshOn} size="lg" />
+        </FormControl>
+        <Table height={0}>
+          <Thead>
+            <DagRuns
+              containerRef={containerRef}
+              selected={selected}
+              onSelect={onSelect}
+            />
+          </Thead>
+          <Tbody>
+            {renderTaskRows({
+              task: groups, containerRef, onSelect, selected, dagRunIds,
+            })}
+          </Tbody>
+        </Table>
       </Box>
-    </Box>
+      <Details selected={selected} onSelect={onSelect} />
+    </Flex>
   );
 };
 
