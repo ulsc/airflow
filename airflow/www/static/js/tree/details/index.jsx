@@ -39,7 +39,7 @@ const Details = ({
     <Box>
       {/* TODO: get full instance data from the API */}
       {!selected.runId && !selected.taskId && <DagContent />}
-      {selected.runId && !selected.taskId && <DagRunContent />}
+      {selected.runId && !selected.taskId && <DagRunContent dagRun={selected} />}
       {selected.taskId && <TaskInstanceContent instance={selected} />}
     </Box>
   </Flex>

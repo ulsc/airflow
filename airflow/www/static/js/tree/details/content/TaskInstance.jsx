@@ -17,15 +17,151 @@
  * under the License.
  */
 
+/* global moment */
+
 import React from 'react';
 import {
   Text,
+  Box,
 } from '@chakra-ui/react';
 
-const TaskInstance = () => (
-  <>
-    <Text>task instance details</Text>
-  </>
-);
+import { formatDateTime, getDuration, formatDuration } from '../../../datetime_utils';
+
+const TaskInstance = ({
+  instance: {
+    duration, operator, startDate, endDate, state, taskId, runId, // mappedStates,
+  },
+}) => {
+  const isGroup = false; // !!group.children;
+  const groupSummary = [];
+  // const mapSummary = [];
+
+  // if (isGroup) {
+  //   const numMap = finalStatesMap();
+  //   group.children.forEach((child) => {
+  //     const taskInstance = child.instances.find((ti) => ti.runId === runId);
+  //     if (taskInstance) {
+  //       const stateKey = taskInstance.state == null ? 'no_status' : taskInstance.state;
+  //       if (numMap.has(stateKey)) numMap.set(stateKey, numMap.get(stateKey) + 1);
+  //     }
+  //   });
+  //   numMap.forEach((key, val) => {
+  //     if (key > 0) {
+  //       groupSummary.push(
+  //         // eslint-disable-next-line react/no-array-index-key
+  //         <Text key={val} ml="10px">
+  //           {val}
+  //           {': '}
+  //           {key}
+  //         </Text>,
+  //       );
+  //     }
+  //   });
+  // }
+
+  // if (group.isMapped && mappedStates) {
+  //   const numMap = finalStatesMap();
+  //   mappedStates.forEach((s) => {
+  //     const stateKey = s || 'no_status';
+  //     if (numMap.has(stateKey)) numMap.set(stateKey, numMap.get(stateKey) + 1);
+  //   });
+  //   numMap.forEach((key, val) => {
+  //     if (key > 0) {
+  //       mapSummary.push(
+  //         // eslint-disable-next-line react/no-array-index-key
+  //         <Text key={val} ml="10px">
+  //           {val}
+  //           {': '}
+  //           {key}
+  //         </Text>,
+  //       );
+  //     }
+  //   });
+  // }
+
+  const taskIdTitle = isGroup ? 'Task Group Id: ' : 'Task Id: ';
+
+  return (
+    <Box fontSize="12px" py="4px">
+      {/* {group.tooltip && (
+        <Text>{group.tooltip}</Text>
+      )} */}
+      <Text>
+        <Text as="strong">Status:</Text>
+        {' '}
+        {state || 'no status'}
+      </Text>
+      {isGroup && (
+        <>
+          <br />
+          <Text as="strong">Group Summary</Text>
+          {groupSummary}
+        </>
+      )}
+      {/* {group.isMapped && (
+        <>
+          <br />
+          <Text as="strong">
+            {mappedStates.length}
+            {' '}
+            {mappedStates.length === 1 ? 'Task ' : 'Tasks '}
+            Mapped
+          </Text>
+          {mapSummary}
+        </>
+      )} */}
+      <br />
+      <Text>
+        {taskIdTitle}
+        {taskId}
+      </Text>
+      <Text whiteSpace="nowrap">
+        Run Id:
+        {' '}
+        {runId}
+      </Text>
+      {operator && (
+      <Text>
+        Operator:
+        {' '}
+        {operator}
+      </Text>
+      )}
+      <Text>
+        Duration:
+        {' '}
+        {formatDuration(duration || getDuration(startDate, endDate))}
+      </Text>
+      <br />
+      <Text as="strong">UTC</Text>
+      <Text>
+        Started:
+        {' '}
+        {startDate && formatDateTime(moment.utc(startDate))}
+      </Text>
+      <Text>
+        Ended:
+        {' '}
+        {endDate && formatDateTime(moment.utc(endDate))}
+      </Text>
+      <br />
+      <Text as="strong">
+        Local:
+        {' '}
+        {moment().format('Z')}
+      </Text>
+      <Text>
+        Started:
+        {' '}
+        {startDate && formatDateTime(startDate)}
+      </Text>
+      <Text>
+        Ended:
+        {' '}
+        {endDate && formatDateTime(endDate)}
+      </Text>
+    </Box>
+  );
+};
 
 export default TaskInstance;
