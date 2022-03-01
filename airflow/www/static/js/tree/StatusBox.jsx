@@ -37,7 +37,7 @@ const StatusBox = ({
   const hoverBlue = `${colors.blue[100]}50`;
 
   // Fetch the corresponding column element and set its background color when hovering
-  const onMouseOver = () => {
+  const onMouseEnter = () => {
     if (selectedInstance.runId !== runId) {
       [...containerRef.current.getElementsByClassName(`js-${runId}`)]
         .forEach((e) => { e.style.backgroundColor = hoverBlue; });
@@ -50,6 +50,7 @@ const StatusBox = ({
 
   const onClick = (e) => {
     e.stopPropagation();
+    onMouseLeave();
     onSelectInstance(instance);
   };
 
@@ -73,7 +74,7 @@ const StatusBox = ({
           cursor={!group.children && 'pointer'}
           data-testid="task-instance"
           zIndex={1}
-          onMouseEnter={onMouseOver}
+          onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           {...rest}
         >

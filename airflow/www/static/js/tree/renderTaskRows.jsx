@@ -98,7 +98,6 @@ const TaskInstances = ({
             key={key}
             instance={instance}
             containerRef={containerRef}
-            extraLinks={task.extraLinks}
             group={task}
             onSelectInstance={onSelectInstance}
             selectedInstance={selectedInstance}
