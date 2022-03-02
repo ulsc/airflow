@@ -45,7 +45,6 @@ const Header = ({
   dagRuns,
 }) => {
   const dagRun = dagRuns.find((r) => r.runId === runId);
-  // console.log(dagRun);
   let runLabel = dagRun ? formatDateTime(dagRun.dataIntervalEnd) : '';
   if (dagRun && dagRun.runType === 'manual') {
     runLabel = (
@@ -65,7 +64,7 @@ const Header = ({
       </BreadcrumbItem>
       {runId && (
         <BreadcrumbItem isCurrentPage={runId && !taskId}>
-          <BreadcrumbLink onClick={() => onSelect({ runId })}>
+          <BreadcrumbLink onClick={() => onSelect({ runId, dagRun })}>
             <LabelValue label="Run" value={runLabel} />
           </BreadcrumbLink>
         </BreadcrumbItem>

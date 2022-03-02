@@ -48,8 +48,7 @@ const StatusBox = ({
       .forEach((e) => { e.style.backgroundColor = null; });
   };
 
-  const onClick = (e) => {
-    e.stopPropagation();
+  const onClick = () => {
     onMouseLeave();
     onSelect({
       taskId, runId, instance, task: group,

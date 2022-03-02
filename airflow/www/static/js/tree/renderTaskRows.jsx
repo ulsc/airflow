@@ -40,18 +40,14 @@ import { getMetaValue } from '../utils';
 const dagId = getMetaValue('dag_id');
 
 const renderTaskRows = ({
-  task, containerRef, level = 0, isParentOpen, onSelect, selected, dagRunIds,
+  task, level = 0, ...rest
 }) => task.children.map((t) => (
   <Row
+    {...rest}
     key={t.id}
     task={t}
     level={level}
-    containerRef={containerRef}
     prevTaskId={task.id}
-    isParentOpen={isParentOpen}
-    onSelect={onSelect}
-    selected={selected}
-    dagRunIds={dagRunIds}
   />
 ));
 

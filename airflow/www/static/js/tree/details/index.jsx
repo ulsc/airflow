@@ -35,7 +35,6 @@ const Details = ({
   onSelect,
 }) => {
   const { data: { dagRuns = [] } } = useTreeData();
-  console.log(selected);
   return (
     <Flex borderLeftWidth="1px" flexDirection="column" p={3} flexGrow={1}>
       <Header selected={selected} onSelect={onSelect} dagRuns={dagRuns} />

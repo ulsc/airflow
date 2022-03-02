@@ -23,6 +23,6 @@ import { useQuery } from 'react-query';
 export default function useDag(dagId) {
   return useQuery(
     ['dag', dagId],
-    () => axios.get(`/dags/${dagId}`),
+    () => axios.get(`/dags/${dagId}/details`),
   );
 }

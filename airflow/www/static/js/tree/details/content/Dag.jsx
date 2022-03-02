@@ -27,13 +27,23 @@ import {
 } from '@chakra-ui/react';
 
 import { getMetaValue } from '../../../utils';
-import { useDag } from '../../api';
+import { useDag, useTasks } from '../../api';
 
 const dagId = getMetaValue('dag_id');
 
 const Dag = () => {
   const { data: dag } = useDag(dagId);
-  if (!dag) return null;
+  const { data: taskData } = useTasks(dagId);
+  if (!dag || !taskData) return null;
+  const { tasks = [], totalEntries = '' } = taskData;
+  const operators = {};
+  tasks.forEach((t) => {
+    if (!operators[t.classRef.className]) {
+      operators[t.classRef.className] = 1;
+    } else {
+      operators[t.classRef.className] += 1;
+    }
+  });
   const {
     description, tags, fileloc, owners,
   } = dag;
@@ -50,6 +60,19 @@ const Dag = () => {
         <Text mr={2}>Owner:</Text>
         {owners.map((o) => <Text key={o}>{o}</Text>)}
       </Flex>
+      <Text>
+        {totalEntries}
+        {' '}
+        Tasks
+      </Text>
+      {Object.entries(operators).map(([key, value]) => (
+        <Text key={key}>
+          {value}
+          {' '}
+          {key}
+          {value > 1 && 's'}
+        </Text>
+      ))}
     </>
   );
 };
