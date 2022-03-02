@@ -17,41 +17,12 @@
  * under the License.
  */
 
-import React from 'react';
-import {
-  Text,
-  Tag,
-  Code,
-  Flex,
-  HStack,
-} from '@chakra-ui/react';
+import axios from 'axios';
+import { useQuery } from 'react-query';
 
-import { getMetaValue } from '../../../utils';
-import { useDag } from '../../api';
-
-const dagId = getMetaValue('dag_id');
-
-const Dag = () => {
-  const { data: dag } = useDag(dagId);
-  if (!dag) return null;
-  const {
-    description, tags, fileloc, owners,
-  } = dag;
-  return (
-    <>
-      {description && <Text>{description}</Text>}
-      <HStack>{tags.map((tag) => <Tag key={tag.name} size="lg">{tag.name}</Tag>)}</HStack>
-      <Text>
-        Relative File Location:
-        {' '}
-        <Code colorScheme="blackAlpha">{fileloc}</Code>
-      </Text>
-      <Flex>
-        <Text mr={2}>Owner:</Text>
-        {owners.map((o) => <Text key={o}>{o}</Text>)}
-      </Flex>
-    </>
+export default function useTasks(dagId) {
+  return useQuery(
+    ['tasks', dagId],
+    () => axios.get(`/dags/${dagId}/tasks`),
   );
-};
-
-export default Dag;
+}

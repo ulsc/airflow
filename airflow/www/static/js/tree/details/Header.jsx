@@ -27,9 +27,8 @@ import {
 } from '@chakra-ui/react';
 import { MdPlayArrow } from 'react-icons/md';
 
-import useTreeData from '../useTreeData';
 import { formatDateTime } from '../../datetime_utils';
-import getMetaValue from '../../meta_value';
+import { getMetaValue } from '../../utils';
 
 const dagId = getMetaValue('dag_id');
 
@@ -43,8 +42,8 @@ const LabelValue = ({ label, value }) => (
 const Header = ({
   selected: { taskId, runId },
   onSelect,
+  dagRuns,
 }) => {
-  const { data: { dagRuns = [] } } = useTreeData();
   const dagRun = dagRuns.find((r) => r.runId === runId);
   // console.log(dagRun);
   let runLabel = dagRun ? formatDateTime(dagRun.dataIntervalEnd) : '';

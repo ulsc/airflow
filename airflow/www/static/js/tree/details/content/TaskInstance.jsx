@@ -24,68 +24,70 @@ import {
   Text,
   Box,
 } from '@chakra-ui/react';
+import { finalStatesMap } from '../../../utils';
 
 import { formatDateTime, getDuration, formatDuration } from '../../../datetime_utils';
 
 const TaskInstance = ({
   instance: {
-    duration, operator, startDate, endDate, state, taskId, runId, // mappedStates,
+    duration, operator, startDate, endDate, state, taskId, runId, mappedStates,
   },
+  task,
 }) => {
-  const isGroup = false; // !!group.children;
+  const isGroup = !!task.children;
   const groupSummary = [];
-  // const mapSummary = [];
+  const mapSummary = [];
 
-  // if (isGroup) {
-  //   const numMap = finalStatesMap();
-  //   group.children.forEach((child) => {
-  //     const taskInstance = child.instances.find((ti) => ti.runId === runId);
-  //     if (taskInstance) {
-  //       const stateKey = taskInstance.state == null ? 'no_status' : taskInstance.state;
-  //       if (numMap.has(stateKey)) numMap.set(stateKey, numMap.get(stateKey) + 1);
-  //     }
-  //   });
-  //   numMap.forEach((key, val) => {
-  //     if (key > 0) {
-  //       groupSummary.push(
-  //         // eslint-disable-next-line react/no-array-index-key
-  //         <Text key={val} ml="10px">
-  //           {val}
-  //           {': '}
-  //           {key}
-  //         </Text>,
-  //       );
-  //     }
-  //   });
-  // }
+  if (isGroup) {
+    const numMap = finalStatesMap();
+    task.children.forEach((child) => {
+      const taskInstance = child.instances.find((ti) => ti.runId === runId);
+      if (taskInstance) {
+        const stateKey = taskInstance.state == null ? 'no_status' : taskInstance.state;
+        if (numMap.has(stateKey)) numMap.set(stateKey, numMap.get(stateKey) + 1);
+      }
+    });
+    numMap.forEach((key, val) => {
+      if (key > 0) {
+        groupSummary.push(
+          // eslint-disable-next-line react/no-array-index-key
+          <Text key={val} ml="10px">
+            {val}
+            {': '}
+            {key}
+          </Text>,
+        );
+      }
+    });
+  }
 
-  // if (group.isMapped && mappedStates) {
-  //   const numMap = finalStatesMap();
-  //   mappedStates.forEach((s) => {
-  //     const stateKey = s || 'no_status';
-  //     if (numMap.has(stateKey)) numMap.set(stateKey, numMap.get(stateKey) + 1);
-  //   });
-  //   numMap.forEach((key, val) => {
-  //     if (key > 0) {
-  //       mapSummary.push(
-  //         // eslint-disable-next-line react/no-array-index-key
-  //         <Text key={val} ml="10px">
-  //           {val}
-  //           {': '}
-  //           {key}
-  //         </Text>,
-  //       );
-  //     }
-  //   });
-  // }
+  if (task.isMapped && mappedStates) {
+    const numMap = finalStatesMap();
+    mappedStates.forEach((s) => {
+      const stateKey = s || 'no_status';
+      if (numMap.has(stateKey)) numMap.set(stateKey, numMap.get(stateKey) + 1);
+    });
+    numMap.forEach((key, val) => {
+      if (key > 0) {
+        mapSummary.push(
+          // eslint-disable-next-line react/no-array-index-key
+          <Text key={val} ml="10px">
+            {val}
+            {': '}
+            {key}
+          </Text>,
+        );
+      }
+    });
+  }
 
   const taskIdTitle = isGroup ? 'Task Group Id: ' : 'Task Id: ';
 
   return (
     <Box fontSize="12px" py="4px">
-      {/* {group.tooltip && (
-        <Text>{group.tooltip}</Text>
-      )} */}
+      {task.tooltip && (
+        <Text>{task.tooltip}</Text>
+      )}
       <Text>
         <Text as="strong">Status:</Text>
         {' '}
@@ -98,7 +100,7 @@ const TaskInstance = ({
           {groupSummary}
         </>
       )}
-      {/* {group.isMapped && (
+      {task.isMapped && (
         <>
           <br />
           <Text as="strong">
@@ -109,7 +111,7 @@ const TaskInstance = ({
           </Text>
           {mapSummary}
         </>
-      )} */}
+      )}
       <br />
       <Text>
         {taskIdTitle}

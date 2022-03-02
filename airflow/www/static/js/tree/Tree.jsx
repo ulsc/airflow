@@ -63,14 +63,14 @@ const Tree = () => {
     <Flex pl="24px" position="relative" flexDirection="row" justifyContent="space-between" ref={containerRef}>
       <Text transform="rotate(-90deg)" position="absolute" left="-6px" top="130px">Runs</Text>
       <Text transform="rotate(-90deg)" position="absolute" left="-6px" top="190px">Tasks</Text>
-      <Box mr="12px" pb="12px" overflowX="auto" ref={scrollRef} maxWidth="300px" minWidth="300px" position="relative">
-        <FormControl display="flex" alignItems="center" justifyContent="flex-end" width="100%" mb={2}>
-          {isRefreshOn && <Spinner color="blue.500" speed="1s" mr="4px" />}
-          <FormLabel htmlFor="auto-refresh" mb={0} fontSize="12px" fontWeight="normal">
-            Auto-refresh
-          </FormLabel>
-          <Switch id="auto-refresh" onChange={onToggleRefresh} isChecked={isRefreshOn} size="lg" />
-        </FormControl>
+      <FormControl display="flex" position="absolute" left="220px">
+        {isRefreshOn && <Spinner color="blue.500" speed="1s" mr="4px" />}
+        <FormLabel htmlFor="auto-refresh" mb={0} fontSize="12px" fontWeight="normal">
+          Auto-refresh
+        </FormLabel>
+        <Switch id="auto-refresh" onChange={onToggleRefresh} isChecked={isRefreshOn} size="lg" />
+      </FormControl>
+      <Box mr="12px" pb="12px" overflowX="auto" ref={scrollRef} maxWidth="300px" minWidth="300px" position="relative" mt="24px">
         <Table height={0}>
           <Thead>
             <DagRuns

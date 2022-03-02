@@ -38,6 +38,14 @@ const mainElement = document.getElementById('react-container');
 shadowRoot.appendChild(mainElement);
 const queryClient = new QueryClient();
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 function App() {
   return (
     <React.StrictMode>

@@ -28,21 +28,31 @@ import Header from './Header';
 import TaskInstanceContent from './content/TaskInstance';
 import DagRunContent from './content/DagRun';
 import DagContent from './content/Dag';
+import useTreeData from '../useTreeData';
 
 const Details = ({
   selected,
   onSelect,
-}) => (
-  <Flex borderLeftWidth="1px" flexDirection="column" p={3} flexGrow={1}>
-    <Header selected={selected} onSelect={onSelect} />
-    <Divider my={2} />
-    <Box>
-      {/* TODO: get full instance data from the API */}
-      {!selected.runId && !selected.taskId && <DagContent />}
-      {selected.runId && !selected.taskId && <DagRunContent dagRun={selected} />}
-      {selected.taskId && <TaskInstanceContent instance={selected} />}
-    </Box>
-  </Flex>
-);
+}) => {
+  const { data: { dagRuns = [] } } = useTreeData();
+  console.log(selected);
+  return (
+    <Flex borderLeftWidth="1px" flexDirection="column" p={3} flexGrow={1}>
+      <Header selected={selected} onSelect={onSelect} dagRuns={dagRuns} />
+      <Divider my={2} />
+      <Box>
+        {/* TODO: get full instance data from the API */}
+        {!selected.runId && !selected.taskId && <DagContent />}
+        {selected.runId && !selected.taskId && <DagRunContent dagRun={selected.dagRun} />}
+        {selected.taskId && (
+        <TaskInstanceContent
+          instance={selected.instance}
+          task={selected.task}
+        />
+        )}
+      </Box>
+    </Flex>
+  );
+};
 
 export default Details;

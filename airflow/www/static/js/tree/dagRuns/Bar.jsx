@@ -59,7 +59,7 @@ const DagRunBar = ({
         zIndex={1}
         onClick={(e) => {
           e.stopPropagation();
-          onSelect(run);
+          onSelect({ runId: run.runId, dagRun: run });
         }}
         position="relative"
         data-peer

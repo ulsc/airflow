@@ -32,7 +32,7 @@ import InstanceTooltip from './InstanceTooltip';
 const StatusBox = ({
   group, instance, containerRef, onSelect, selected, ...rest
 }) => {
-  const { runId } = instance;
+  const { runId, taskId } = instance;
   const { colors } = useTheme();
   const hoverBlue = `${colors.blue[100]}50`;
 
@@ -51,7 +51,9 @@ const StatusBox = ({
   const onClick = (e) => {
     e.stopPropagation();
     onMouseLeave();
-    onSelect(instance);
+    onSelect({
+      taskId, runId, instance, task: group,
+    });
   };
 
   return (
