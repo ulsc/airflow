@@ -53,8 +53,12 @@ const Tree = () => {
   const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: isPanelOpen });
 
   const toggleSidePanel = () => {
-    if (!isOpen) localStorage.setItem(sidePanelKey, true);
-    else localStorage.setItem(sidePanelKey, false);
+    if (!isOpen) {
+      localStorage.setItem(sidePanelKey, true);
+    } else {
+      setSelected({});
+      localStorage.setItem(sidePanelKey, false);
+    }
     onToggle();
   };
 
@@ -123,8 +127,8 @@ const Tree = () => {
           pb="12px"
           overflowX="auto"
           ref={scrollRef}
-          maxWidth={isOpen && '300px'}
-          minWidth={isOpen && '300px'}
+          flexGrow={1}
+          width={isOpen && '300px'}
         >
           <Table height={0}>
             <Thead>

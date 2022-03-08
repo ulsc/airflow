@@ -23,7 +23,6 @@ import camelcaseKeys from 'camelcase-keys';
 import useDag from './useDag';
 import useTasks from './useTasks';
 
-axios.defaults.baseURL = '/api/v1';
 axios.interceptors.response.use(
   (res) => (res.data ? camelcaseKeys(res.data, { deep: true }) : res),
 );

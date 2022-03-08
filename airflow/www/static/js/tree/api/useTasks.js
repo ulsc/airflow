@@ -23,6 +23,6 @@ import { useQuery } from 'react-query';
 export default function useTasks(dagId) {
   return useQuery(
     ['tasks', dagId],
-    () => axios.get(`/dags/${dagId}/tasks`),
+    () => axios.get(`/api/v1/dags/${dagId}/tasks`),
   );
 }
