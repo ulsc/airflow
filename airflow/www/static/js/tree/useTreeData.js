@@ -19,6 +19,7 @@
 
 /* global treeData, localStorage, autoRefreshInterval, fetch */
 
+import { useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 import camelcaseKeys from 'camelcase-keys';
 import { useQuery } from 'react-query';
@@ -54,8 +55,9 @@ const formatData = (data) => {
 
 const useTreeData = () => {
   const initialData = formatData(treeData);
+  const canRefresh = isPaused !== 'True' && !JSON.parse(localStorage.getItem(autoRefreshKey));
 
-  const defaultIsOpen = isPaused !== 'True' && !JSON.parse(localStorage.getItem(autoRefreshKey)) && areActiveRuns(initialData.dagRuns);
+  const defaultIsOpen = canRefresh && areActiveRuns(initialData.dagRuns);
   const { isOpen: isRefreshOn, onToggle, onClose } = useDisclosure({ defaultIsOpen });
 
   const onToggleRefresh = () => {
@@ -88,11 +90,23 @@ const useTreeData = () => {
       dagRuns: [],
     };
   }, {
-    // only enabled and refetch if the refresh switch is on
-    enabled: isRefreshOn,
+    // only refetch if the refresh switch is on
     refetchInterval: isRefreshOn && autoRefreshInterval * 1000,
     initialData,
   });
+
+  // turn on autorefresh if data is active again
+  useEffect(() => {
+    if (
+      query.data.dagRuns
+      && JSON.stringify(query.data.dagRuns) !== JSON.stringify(initialData.dagRuns)
+      && canRefresh
+      && areActiveRuns(query.data.dagRuns)
+      && !isRefreshOn
+    ) {
+      onToggle();
+    }
+  }, [canRefresh, initialData.dagRuns, isRefreshOn, onToggle, query.data]);
 
   return {
     ...query,

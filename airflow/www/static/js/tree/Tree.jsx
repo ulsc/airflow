@@ -128,7 +128,8 @@ const Tree = () => {
           overflowX="auto"
           ref={scrollRef}
           flexGrow={1}
-          width={isOpen && '300px'}
+          maxWidth={isOpen && '300px'}
+          minWidth={isOpen && '300px'}
         >
           <Table height={0}>
             <Thead>

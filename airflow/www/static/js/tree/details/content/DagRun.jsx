@@ -20,7 +20,6 @@
 /* global moment */
 
 import React from 'react';
-import axios from 'axios';
 import {
   Flex,
   Text,
@@ -30,71 +29,16 @@ import {
 import { MdPlayArrow } from 'react-icons/md';
 
 import { formatDateTime, formatDuration } from '../../../datetime_utils';
-import { getMetaValue } from '../../../utils';
+import { useClearRun, useMarkFailedRun, useMarkSuccessRun } from '../../api';
 
 const DagRun = ({
   dagRun: {
     dagId, state, runId, duration, dataIntervalStart, dataIntervalEnd, startDate, endDate, runType,
   },
 }) => {
-  const csrfToken = getMetaValue('csrf_token');
-
-  const onClear = async () => {
-    const params = new URLSearchParams({
-      csrf_token: csrfToken,
-      confirmed: true,
-      dag_id: dagId,
-      dag_run_id: runId,
-    }).toString();
-
-    try {
-      await axios.post('/dagrun_clear', params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const markFailed = async () => {
-    const params = new URLSearchParams({
-      csrf_token: csrfToken,
-      confirmed: true,
-      dag_id: dagId,
-      dag_run_id: runId,
-    }).toString();
-
-    try {
-      await axios.post('/dagrun_failed', params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const markSuccess = async () => {
-    const params = new URLSearchParams({
-      csrf_token: csrfToken,
-      confirmed: true,
-      dag_id: dagId,
-      dag_run_id: runId,
-    }).toString();
-
-    try {
-      await axios.post('/dagrun_success', params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const { mutate: onClear } = useClearRun(dagId, runId);
+  const { mutate: markFailed } = useMarkFailedRun(dagId, runId);
+  const { mutate: markSuccess } = useMarkSuccessRun(dagId, runId);
 
   return (
     <Box fontSize="12px" py="4px">
