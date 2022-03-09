@@ -25,6 +25,7 @@ import {
   Text,
   Box,
   Button,
+  Link,
 } from '@chakra-ui/react';
 import { MdPlayArrow } from 'react-icons/md';
 
@@ -40,12 +41,19 @@ const DagRun = ({
   const { mutate: markFailed } = useMarkFailedRun(dagId, runId);
   const { mutate: markSuccess } = useMarkSuccessRun(dagId, runId);
 
+  const params = new URLSearchParams({
+    dag_id: dagId,
+    run_id: runId,
+  }).toString();
+  const detailsLink = `/dagrun_details?${params}`;
+
   return (
     <Box fontSize="12px" py="4px">
       <Flex justifyContent="space-evenly">
         <Button onClick={onClear}>Clear</Button>
         <Button onClick={markFailed} colorScheme="red">Mark Failed</Button>
         <Button onClick={markSuccess} colorScheme="green">Mark Success</Button>
+        <Button as={Link} variant="outline" href={detailsLink}>More Details</Button>
       </Flex>
       <Text>
         <Text as="strong">Status:</Text>

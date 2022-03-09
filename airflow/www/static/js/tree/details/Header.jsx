@@ -57,20 +57,20 @@ const Header = ({
 
   return (
     <Breadcrumb>
-      <BreadcrumbItem isCurrentPage={!runId && !taskId}>
+      <BreadcrumbItem isCurrentPage={!runId && !taskId} mt="15px">
         <BreadcrumbLink onClick={() => onSelect({})}>
           <LabelValue label="DAG" value={dagId} />
         </BreadcrumbLink>
       </BreadcrumbItem>
       {runId && (
-        <BreadcrumbItem isCurrentPage={runId && !taskId}>
+        <BreadcrumbItem isCurrentPage={runId && !taskId} mt="15px">
           <BreadcrumbLink onClick={() => onSelect({ runId, dagRun })}>
             <LabelValue label="Run" value={runLabel} />
           </BreadcrumbLink>
         </BreadcrumbItem>
       )}
       {taskId && (
-        <BreadcrumbItem isCurrentPage>
+        <BreadcrumbItem isCurrentPage mt="15px">
           <BreadcrumbLink>
             <LabelValue label="Task" value={taskId} />
           </BreadcrumbLink>

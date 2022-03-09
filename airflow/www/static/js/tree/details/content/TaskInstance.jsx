@@ -23,14 +23,28 @@ import React from 'react';
 import {
   Text,
   Box,
+  Button,
+  Flex,
+  Link,
 } from '@chakra-ui/react';
-import { finalStatesMap } from '../../../utils';
+import { finalStatesMap, getMetaValue } from '../../../utils';
 
 import { formatDateTime, getDuration, formatDuration } from '../../../datetime_utils';
 
+const isK8sExecutor = getMetaValue('k8s_or_k8scelery_executor') === 'True';
+
 const TaskInstance = ({
   instance: {
-    duration, operator, startDate, endDate, state, taskId, runId, mappedStates,
+    dagId,
+    duration,
+    operator,
+    startDate,
+    endDate,
+    state,
+    taskId,
+    runId,
+    mappedStates,
+    executionDate,
   },
   task,
 }) => {
@@ -83,8 +97,35 @@ const TaskInstance = ({
 
   const taskIdTitle = isGroup ? 'Task Group Id: ' : 'Task Id: ';
 
+  const params = new URLSearchParams({
+    dag_id: dagId,
+    task_id: task.id,
+    execution_date: executionDate,
+  }).toString();
+  const detailsLink = `/task?${params}`;
+  const renderedLink = `/rendered-templates?${params}`;
+  const logLink = `/log?${params}`;
+  const k8sLink = `/rendered-k8s?${params}`;
+  const listParams = new URLSearchParams({
+    _flt_3_dag_id: dagId,
+    _flt_3_task_id: taskId,
+    _oc_TaskInstanceModelView: executionDate,
+  });
+  const allInstancesLink = `/taskinstance/list?${listParams}`;
+
   return (
     <Box fontSize="12px" py="4px">
+      {!isGroup && !task.isMapped && (
+        <Flex justifyContent="space-evenly">
+          <Button as={Link} variant="outline" href={detailsLink}>Instance Details</Button>
+          <Button as={Link} variant="outline" href={renderedLink}>Rendered Template</Button>
+          {isK8sExecutor && (
+            <Button as={Link} variant="outline" href={k8sLink}>K8s Pod Spec</Button>
+          )}
+          <Button as={Link} variant="outline" href={logLink}>Log</Button>
+          <Button as={Link} variant="outline" href={allInstancesLink}>All Instances</Button>
+        </Flex>
+      )}
       {task.tooltip && (
         <Text>{task.tooltip}</Text>
       )}
