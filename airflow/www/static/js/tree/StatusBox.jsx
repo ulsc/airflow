@@ -29,6 +29,17 @@ import {
 
 import InstanceTooltip from './InstanceTooltip';
 
+export const SimpleStatus = ({ state, ...rest }) => (
+  <Box
+    width="10px"
+    height="10px"
+    backgroundColor={stateColors[state] || 'white'}
+    borderRadius="2px"
+    borderWidth={state ? 0 : 1}
+    {...rest}
+  />
+);
+
 const StatusBox = ({
   group, instance, containerRef, onSelect, selected, ...rest
 }) => {
@@ -79,13 +90,7 @@ const StatusBox = ({
           onMouseLeave={onMouseLeave}
           {...rest}
         >
-          <Box
-            width="10px"
-            height="10px"
-            backgroundColor={stateColors[instance.state] || 'white'}
-            borderRadius="2px"
-            borderWidth={instance.state ? 0 : 1}
-          />
+          <SimpleStatus state={instance.state} />
         </Flex>
       </Tooltip>
     </>

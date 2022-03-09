@@ -38,6 +38,7 @@ import MarkSuccessAction from './taskActions/MarkSuccess';
 
 import { finalStatesMap, getMetaValue } from '../../../utils';
 import { formatDateTime, getDuration, formatDuration } from '../../../datetime_utils';
+import { SimpleStatus } from '../../StatusBox';
 
 const isK8sExecutor = getMetaValue('k8s_or_k8scelery_executor') === 'True';
 
@@ -125,7 +126,7 @@ const TaskInstance = ({
     <Box fontSize="12px" py="4px" minWidth="500px">
       {!isGroup && !task.isMapped && (
         <>
-          <Flex justifyContent="space-evenly">
+          <Flex justifyContent="space-between">
             <Button as={Link} variant="outline" href={detailsLink}>Instance Details</Button>
             <Button as={Link} variant="outline" href={renderedLink}>Rendered Template</Button>
             {isK8sExecutor && (
@@ -139,7 +140,7 @@ const TaskInstance = ({
       )}
       {!isGroup && !task.isMapped && (
         <>
-          <VStack justifyContent="center" divider={<StackDivider />} my={2}>
+          <VStack justifyContent="center" divider={<StackDivider my={3} />} my={3}>
             <RunAction runId={runId} taskId={task.id} dagId={dagId} />
             <ClearAction
               runId={runId}
@@ -156,11 +157,11 @@ const TaskInstance = ({
       {task.tooltip && (
         <Text>{task.tooltip}</Text>
       )}
-      <Text>
+      <Flex alignItems="center">
         <Text as="strong">Status:</Text>
-        {' '}
+        <SimpleStatus state={state} mx={2} />
         {state || 'no status'}
-      </Text>
+      </Flex>
       {isGroup && (
         <>
           <br />

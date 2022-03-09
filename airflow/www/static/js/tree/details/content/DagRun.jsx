@@ -26,9 +26,11 @@ import {
   Box,
   Button,
   Link,
+  Divider,
 } from '@chakra-ui/react';
 import { MdPlayArrow } from 'react-icons/md';
 
+import { SimpleStatus } from '../../StatusBox';
 import { formatDateTime, formatDuration } from '../../../datetime_utils';
 import { useClearRun, useMarkFailedRun, useMarkSuccessRun } from '../../api';
 
@@ -49,17 +51,18 @@ const DagRun = ({
 
   return (
     <Box fontSize="12px" py="4px">
-      <Flex justifyContent="space-evenly">
+      <Flex justifyContent="space-between">
         <Button onClick={onClear} isLoading={isClearLoading}>Clear</Button>
+        <Button as={Link} variant="outline" href={detailsLink}>More Details</Button>
         <Button onClick={markFailed} colorScheme="red" isLoading={isFailedLoading}>Mark Failed</Button>
         <Button onClick={markSuccess} colorScheme="green" isLoading={isSuccessLoading}>Mark Success</Button>
-        <Button as={Link} variant="outline" href={detailsLink}>More Details</Button>
       </Flex>
-      <Text>
+      <Divider my={3} />
+      <Flex alignItems="center">
         <Text as="strong">Status:</Text>
-        {' '}
+        <SimpleStatus state={state} mx={2} />
         {state || 'no status'}
-      </Text>
+      </Flex>
       <br />
       <Text whiteSpace="nowrap">
         Run Id:

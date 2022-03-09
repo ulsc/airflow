@@ -101,12 +101,11 @@ const Tree = () => {
       <Flex flexDirection="row" justifyContent="space-between">
         <Box
           mr="12px"
-          mt="24px"
+          mt="-8px"
           pb="12px"
           overflowX="auto"
           ref={scrollRef}
           flexGrow={1}
-          maxWidth={isOpen && '300px'}
           minWidth={isOpen && '300px'}
         >
           <Table height={0}>

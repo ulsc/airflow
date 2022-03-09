@@ -39,7 +39,7 @@ const Run = ({
   const { mutate: onRun } = useRunTask(dagId, runId, taskId);
 
   return (
-    <Flex justifyContent="space-between" maxWidth="600px" width="100%" my={1}>
+    <Flex justifyContent="space-between" width="100%">
       <ButtonGroup isAttached variant="outline">
         <Button bg={isAllDeps && 'gray.100'} onClick={onToggleAllDeps}>Ignore All Deps</Button>
         <Button bg={isTaskState && 'gray.100'} onClick={onToggleTaskState}>Ignore Task State</Button>

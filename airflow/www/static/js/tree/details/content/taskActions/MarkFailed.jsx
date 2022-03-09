@@ -51,7 +51,7 @@ const Run = ({
   };
 
   return (
-    <Flex justifyContent="space-between" maxWidth="600px" width="100%" my={1}>
+    <Flex justifyContent="space-between" width="100%">
       <ButtonGroup isAttached variant="outline">
         <Button bg={past && 'gray.100'} onClick={onTogglePast}>Past</Button>
         <Button bg={future && 'gray.100'} onClick={onToggleFuture}>Future</Button>
