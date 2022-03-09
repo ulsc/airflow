@@ -40,7 +40,7 @@ const LabelValue = ({ label, value }) => (
 );
 
 const Header = ({
-  selected: { taskId, runId },
+  selected: { taskId, runId, task },
   onSelect,
   dagRuns,
 }) => {
@@ -55,24 +55,26 @@ const Header = ({
     );
   }
 
+  const isMapped = task && task.isMapped;
+
   return (
-    <Breadcrumb>
+    <Breadcrumb color="gray.300">
       <BreadcrumbItem isCurrentPage={!runId && !taskId} mt="15px">
-        <BreadcrumbLink onClick={() => onSelect({})}>
+        <BreadcrumbLink onClick={() => onSelect({})} color="black">
           <LabelValue label="DAG" value={dagId} />
         </BreadcrumbLink>
       </BreadcrumbItem>
       {runId && (
         <BreadcrumbItem isCurrentPage={runId && !taskId} mt="15px">
-          <BreadcrumbLink onClick={() => onSelect({ runId, dagRun })}>
+          <BreadcrumbLink onClick={() => onSelect({ runId, dagRun })}   color="black">
             <LabelValue label="Run" value={runLabel} />
           </BreadcrumbLink>
         </BreadcrumbItem>
       )}
       {taskId && (
         <BreadcrumbItem isCurrentPage mt="15px">
-          <BreadcrumbLink>
-            <LabelValue label="Task" value={taskId} />
+          <BreadcrumbLink   color="black">
+            <LabelValue label="Task" value={isMapped ? `${taskId} []` : taskId} />
           </BreadcrumbLink>
         </BreadcrumbItem>
       )}

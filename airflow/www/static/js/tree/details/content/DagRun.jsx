@@ -52,8 +52,8 @@ const DagRun = ({
   return (
     <Box fontSize="12px" py="4px">
       <Flex justifyContent="space-between">
+        <Button as={Link} variant="ghost" colorScheme="blue" href={detailsLink}>More Details</Button>
         <Button onClick={onClear} isLoading={isClearLoading}>Clear</Button>
-        <Button as={Link} variant="outline" href={detailsLink}>More Details</Button>
         <Button onClick={markFailed} colorScheme="red" isLoading={isFailedLoading}>Mark Failed</Button>
         <Button onClick={markSuccess} colorScheme="green" isLoading={isSuccessLoading}>Mark Success</Button>
       </Flex>

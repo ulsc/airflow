@@ -39,7 +39,7 @@ const Details = ({
     <Flex borderLeftWidth="1px" flexDirection="column" p={3} flexGrow={1} maxWidth="600px">
       <Header selected={selected} onSelect={onSelect} dagRuns={dagRuns} />
       <Divider my={2} />
-      <Box>
+      <Box minWidth="500px">
         {/* TODO: get full instance data from the API */}
         {!selected.runId && !selected.taskId && <DagContent />}
         {selected.runId && !selected.taskId && <DagRunContent dagRun={selected.dagRun} />}

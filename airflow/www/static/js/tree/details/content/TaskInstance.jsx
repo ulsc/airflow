@@ -123,17 +123,17 @@ const TaskInstance = ({
   const allInstancesLink = `/taskinstance/list?${listParams}`;
 
   return (
-    <Box fontSize="12px" py="4px" minWidth="500px">
+    <Box fontSize="12px" py="4px">
       {!isGroup && !task.isMapped && (
         <>
           <Flex justifyContent="space-between">
-            <Button as={Link} variant="outline" href={detailsLink}>Instance Details</Button>
-            <Button as={Link} variant="outline" href={renderedLink}>Rendered Template</Button>
+            <Button as={Link} variant="ghost" colorScheme="blue" href={detailsLink}>More Details</Button>
+            <Button as={Link} variant="ghost" colorScheme="blue" href={renderedLink}>Rendered Template</Button>
             {isK8sExecutor && (
-            <Button as={Link} variant="outline" href={k8sLink}>K8s Pod Spec</Button>
+            <Button as={Link} variant="ghost" colorScheme="blue" href={k8sLink}>K8s Pod Spec</Button>
             )}
-            <Button as={Link} variant="outline" href={logLink}>Log</Button>
-            <Button as={Link} variant="outline" href={allInstancesLink}>All Instances</Button>
+            <Button as={Link} variant="ghost" colorScheme="blue" href={logLink}>Log</Button>
+            <Button as={Link} variant="ghost" colorScheme="blue" href={allInstancesLink}>All Instances</Button>
           </Flex>
           <Divider mt={3} />
         </>
@@ -165,7 +165,7 @@ const TaskInstance = ({
       {isGroup && (
         <>
           <br />
-          <Text as="strong">Group Summary</Text>
+          <Text as="strong">Task Group Summary</Text>
           {groupSummary}
         </>
       )}

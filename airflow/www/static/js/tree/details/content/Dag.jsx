@@ -17,15 +17,21 @@
  * under the License.
  */
 
+/* global moment */
+
 import React from 'react';
 import {
-  Text,
+  Table,
+  Tbody,
+  Tr,
+  Td,
   Tag,
+  Text,
   Code,
-  Flex,
-  HStack,
+  Link,
 } from '@chakra-ui/react';
 
+import { formatDateTime, formatDuration } from '../../../datetime_utils';
 import { getMetaValue } from '../../../utils';
 import { useDag, useTasks } from '../../api';
 
@@ -36,6 +42,10 @@ const Dag = () => {
   const { data: taskData } = useTasks(dagId);
   if (!dag || !taskData) return null;
   const { tasks = [], totalEntries = '' } = taskData;
+  const {
+    description, tags, fileloc, owners, catchup, startDate, timezone, dagRunTimeout,
+  } = dag;
+
   const operators = {};
   tasks.forEach((t) => {
     if (!operators[t.classRef.className]) {
@@ -44,36 +54,69 @@ const Dag = () => {
       operators[t.classRef.className] += 1;
     }
   });
-  const {
-    description, tags, fileloc, owners,
-  } = dag;
+
+  const timeout = moment.duration(dagRunTimeout.days, 'd').add(dagRunTimeout.seconds, 's');
+
   return (
-    <>
-      {description && <Text>{description}</Text>}
-      <HStack>{tags.map((tag) => <Tag key={tag.name} size="lg">{tag.name}</Tag>)}</HStack>
-      <Text>
-        Relative File Location:
-        {' '}
-        <Code colorScheme="blackAlpha">{fileloc}</Code>
-      </Text>
-      <Flex>
-        <Text mr={2}>Owner:</Text>
-        {owners.map((o) => <Text key={o}>{o}</Text>)}
-      </Flex>
-      <Text>
-        {totalEntries}
-        {' '}
-        Tasks
-      </Text>
-      {Object.entries(operators).map(([key, value]) => (
-        <Text key={key}>
-          {value}
-          {' '}
-          {key}
-          {value > 1 && 's'}
-        </Text>
-      ))}
-    </>
+    <Table variant="striped">
+      <Tbody>
+        {description && (
+        <Tr>
+          <Td>Description</Td>
+          <Td>{description}</Td>
+        </Tr>
+        )}
+        <Tr>
+          <Td>Start Date</Td>
+          <Td>{formatDateTime(startDate)}</Td>
+        </Tr>
+        <Tr>
+          <Td>Catchup</Td>
+          <Td>{catchup ? 'True' : 'False'}</Td>
+        </Tr>
+        {tags.length && (
+        <Tr>
+          <Td>Tags</Td>
+          <Td>
+            {tags.map((tag) => (
+              <Link key={tag.name} href={`/home?tags=${tag.name}`} mr={1}>
+                <Tag colorScheme="blue" size="lg">{tag.name}</Tag>
+              </Link>
+            ))}
+          </Td>
+        </Tr>
+        )}
+        <Tr>
+          <Td>Owners</Td>
+          <Td>{owners.map((o) => <Text key={o} mr={1}>{o}</Text>)}</Td>
+        </Tr>
+        <Tr>
+          <Td>Relative File Location</Td>
+          <Td><Code colorScheme="blackAlpha">{fileloc}</Code></Td>
+        </Tr>
+        <Tr>
+          <Td>DAG Run Timeout</Td>
+          <Td>{formatDuration(timeout)}</Td>
+        </Tr>
+        <Tr>
+          <Td>Timezone</Td>
+          <Td>{timezone}</Td>
+        </Tr>
+        <Tr>
+          <Td>Total Tasks</Td>
+          <Td>{totalEntries}</Td>
+        </Tr>
+        {Object.entries(operators).map(([key, value]) => (
+          <Tr key={key}>
+            <Td>
+              {key}
+              {value > 1 && 's'}
+            </Td>
+            <Td>{value}</Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
   );
 };
 
