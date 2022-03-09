@@ -18,30 +18,32 @@
  */
 
 import axios from 'axios';
-import camelcaseKeys from 'camelcase-keys';
+import { useMutation, useQueryClient } from 'react-query';
+import { getMetaValue } from '../../utils';
 
-import useDag from './useDag';
-import useTasks from './useTasks';
-import useClearRun from './useClearRun';
-import useMarkFailedRun from './useMarkFailedRun';
-import useMarkSuccessRun from './useMarkSuccessRun';
-import useRunTask from './useRunTask';
-import useClearTask from './useClearTask';
-import useMarkFailedTask from './useMarkFailedTask';
-import useMarkSuccessTask from './useMarkSuccessTask';
+export default function useClearRun(dagId, runId, taskId) {
+  const queryClient = useQueryClient();
+  return useMutation(
+    ['runTask', dagId, runId, taskId],
+    () => {
+      const csrfToken = getMetaValue('csrf_token');
+      const params = new URLSearchParams({
+        csrf_token: csrfToken,
+        dag_id: dagId,
+        dag_run_id: runId,
+        task_id: taskId,
+      }).toString();
 
-axios.interceptors.response.use(
-  (res) => (res.data ? camelcaseKeys(res.data, { deep: true }) : res),
-);
-
-export {
-  useDag,
-  useTasks,
-  useClearRun,
-  useMarkFailedRun,
-  useMarkSuccessRun,
-  useRunTask,
-  useClearTask,
-  useMarkFailedTask,
-  useMarkSuccessTask,
-};
+      return axios.post('/run', params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries('treeData');
+      },
+    },
+  );
+}

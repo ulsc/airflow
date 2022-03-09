@@ -91,7 +91,7 @@ const Tree = () => {
         const extraLinks = newSelected.task.extraLinks || [];
         const { instance } = newSelected;
         callModal(
-          taskId,
+          newSelected.taskId,
           instance.executionDate,
           extraLinks,
           instance.tryNumber,

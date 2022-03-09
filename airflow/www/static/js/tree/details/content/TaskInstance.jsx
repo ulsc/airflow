@@ -26,9 +26,17 @@ import {
   Button,
   Flex,
   Link,
+  VStack,
+  Divider,
+  StackDivider,
 } from '@chakra-ui/react';
-import { finalStatesMap, getMetaValue } from '../../../utils';
 
+import RunAction from './taskActions/Run';
+import ClearAction from './taskActions/Clear';
+import MarkFailedAction from './taskActions/MarkFailed';
+import MarkSuccessAction from './taskActions/MarkSuccess';
+
+import { finalStatesMap, getMetaValue } from '../../../utils';
 import { formatDateTime, getDuration, formatDuration } from '../../../datetime_utils';
 
 const isK8sExecutor = getMetaValue('k8s_or_k8scelery_executor') === 'True';
@@ -114,17 +122,36 @@ const TaskInstance = ({
   const allInstancesLink = `/taskinstance/list?${listParams}`;
 
   return (
-    <Box fontSize="12px" py="4px">
+    <Box fontSize="12px" py="4px" minWidth="500px">
       {!isGroup && !task.isMapped && (
-        <Flex justifyContent="space-evenly">
-          <Button as={Link} variant="outline" href={detailsLink}>Instance Details</Button>
-          <Button as={Link} variant="outline" href={renderedLink}>Rendered Template</Button>
-          {isK8sExecutor && (
+        <>
+          <Flex justifyContent="space-evenly">
+            <Button as={Link} variant="outline" href={detailsLink}>Instance Details</Button>
+            <Button as={Link} variant="outline" href={renderedLink}>Rendered Template</Button>
+            {isK8sExecutor && (
             <Button as={Link} variant="outline" href={k8sLink}>K8s Pod Spec</Button>
-          )}
-          <Button as={Link} variant="outline" href={logLink}>Log</Button>
-          <Button as={Link} variant="outline" href={allInstancesLink}>All Instances</Button>
-        </Flex>
+            )}
+            <Button as={Link} variant="outline" href={logLink}>Log</Button>
+            <Button as={Link} variant="outline" href={allInstancesLink}>All Instances</Button>
+          </Flex>
+          <Divider mt={3} />
+        </>
+      )}
+      {!isGroup && !task.isMapped && (
+        <>
+          <VStack justifyContent="center" divider={<StackDivider />} my={2}>
+            <RunAction runId={runId} taskId={task.id} dagId={dagId} />
+            <ClearAction
+              runId={runId}
+              taskId={task.id}
+              dagId={dagId}
+              executionDate={executionDate}
+            />
+            <MarkFailedAction runId={runId} taskId={task.id} dagId={dagId} />
+            <MarkSuccessAction runId={runId} taskId={task.id} dagId={dagId} />
+          </VStack>
+          <Divider my={2} />
+        </>
       )}
       {task.tooltip && (
         <Text>{task.tooltip}</Text>
