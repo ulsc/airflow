@@ -55,8 +55,6 @@ const Dag = () => {
     }
   });
 
-  const timeout = moment.duration(dagRunTimeout.days, 'd').add(dagRunTimeout.seconds, 's');
-
   return (
     <Table variant="striped">
       <Tbody>
@@ -71,38 +69,6 @@ const Dag = () => {
           <Td>{formatDateTime(startDate)}</Td>
         </Tr>
         <Tr>
-          <Td>Catchup</Td>
-          <Td>{catchup ? 'True' : 'False'}</Td>
-        </Tr>
-        {tags.length && (
-        <Tr>
-          <Td>Tags</Td>
-          <Td>
-            {tags.map((tag) => (
-              <Link key={tag.name} href={`/home?tags=${tag.name}`} mr={1}>
-                <Tag colorScheme="blue" size="lg">{tag.name}</Tag>
-              </Link>
-            ))}
-          </Td>
-        </Tr>
-        )}
-        <Tr>
-          <Td>Owners</Td>
-          <Td>{owners.map((o) => <Text key={o} mr={1}>{o}</Text>)}</Td>
-        </Tr>
-        <Tr>
-          <Td>Relative File Location</Td>
-          <Td><Code colorScheme="blackAlpha">{fileloc}</Code></Td>
-        </Tr>
-        <Tr>
-          <Td>DAG Run Timeout</Td>
-          <Td>{formatDuration(timeout)}</Td>
-        </Tr>
-        <Tr>
-          <Td>Timezone</Td>
-          <Td>{timezone}</Td>
-        </Tr>
-        <Tr>
           <Td>Total Tasks</Td>
           <Td>{totalEntries}</Td>
         </Tr>
@@ -115,6 +81,40 @@ const Dag = () => {
             <Td>{value}</Td>
           </Tr>
         ))}
+        {!!tags.length && (
+        <Tr>
+          <Td>Tags</Td>
+          <Td>
+            {tags.map((tag) => (
+              <Link key={tag.name} href={`/home?tags=${tag.name}`} mr={1}>
+                <Tag colorScheme="blue" size="lg">{tag.name}</Tag>
+              </Link>
+            ))}
+          </Td>
+        </Tr>
+        )}
+        <Tr>
+          <Td>Catchup</Td>
+          <Td>{catchup ? 'True' : 'False'}</Td>
+        </Tr>
+        <Tr>
+          <Td>Owners</Td>
+          <Td>{owners.map((o) => <Text key={o} mr={1}>{o}</Text>)}</Td>
+        </Tr>
+        <Tr>
+          <Td>Relative File Location</Td>
+          <Td><Code colorScheme="blackAlpha">{fileloc}</Code></Td>
+        </Tr>
+        {dagRunTimeout && (
+        <Tr>
+          <Td>DAG Run Timeout</Td>
+          <Td>{formatDuration(moment.duration(dagRunTimeout.days, 'd').add(dagRunTimeout.seconds, 's'))}</Td>
+        </Tr>
+        )}
+        <Tr>
+          <Td>Timezone</Td>
+          <Td>{timezone}</Td>
+        </Tr>
       </Tbody>
     </Table>
   );

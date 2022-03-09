@@ -21,12 +21,12 @@ import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
 
 import { finalStatesMap } from '../utils';
-import { formatDateTime } from '../datetime_utils';
+import { formatDateTime, formatDuration, getDuration } from '../datetime_utils';
 
 const InstanceTooltip = ({
   group,
   instance: {
-    startDate, state, runId, mappedStates,
+    startDate, endDate, duration, state, runId, mappedStates,
   },
 }) => {
   const isGroup = !!group.children;
@@ -82,30 +82,21 @@ const InstanceTooltip = ({
         <Text>{group.tooltip}</Text>
       )}
       <Text>
-        <Text as="strong">
-          {isGroup ? 'Overall ' : ''}
-          Status:
-        </Text>
+        {isGroup ? 'Overall ' : ''}
+        Status:
         {' '}
         {state || 'no status'}
       </Text>
       {isGroup && groupSummary}
-      {group.isMapped && (
-        <>
-          <br />
-          <Text as="strong">
-            {mappedStates.length}
-            {' '}
-            {mappedStates.length === 1 ? 'Task ' : 'Tasks '}
-            Mapped
-          </Text>
-          {mapSummary}
-        </>
-      )}
       <Text>
         Started:
         {' '}
         {startDate && formatDateTime(startDate)}
+      </Text>
+      <Text>
+        Duration:
+        {' '}
+        {formatDuration(duration || getDuration(startDate, endDate))}
       </Text>
     </Box>
   );
