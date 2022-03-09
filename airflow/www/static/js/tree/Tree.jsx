@@ -40,7 +40,6 @@ import useTreeData from './useTreeData';
 import renderTaskRows from './renderTaskRows';
 import DagRuns from './dagRuns';
 import Details from './details';
-import { callModal, callModalDag } from '../dag';
 
 const sidePanelKey = 'showSidePanel';
 
@@ -76,30 +75,9 @@ const Tree = () => {
 
   // show task/run info in the side panel, or just call the regular action modal
   const onSelect = (newSelected) => {
-    if (isOpen) {
-      const isSame = newSelected.runId === runId && newSelected.taskId === taskId;
-      setSelected(isSame ? {} : newSelected);
-    } else if (!isOpen) {
-      if (newSelected.dagRun) {
-        const { dagRun } = newSelected;
-        callModalDag({
-          execution_date: dagRun.executionDate,
-          dag_id: dagRun.dagId,
-          run_id: dagRun.runId,
-        });
-      } else if (newSelected.instance) {
-        const extraLinks = newSelected.task.extraLinks || [];
-        const { instance } = newSelected;
-        callModal(
-          newSelected.taskId,
-          instance.executionDate,
-          extraLinks,
-          instance.tryNumber,
-          instance.operator === 'SubDagOperator' || undefined,
-          instance.runId,
-        );
-      }
-    }
+    const isSame = newSelected.runId === runId && newSelected.taskId === taskId;
+    setSelected(isSame ? {} : newSelected);
+    if (!isOpen) toggleSidePanel();
   };
 
   return (
