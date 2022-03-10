@@ -21,7 +21,6 @@
 
 import React from 'react';
 import {
-  Flex,
   Box,
   Tooltip,
 } from '@chakra-ui/react';
