@@ -30,7 +30,7 @@ import { callModal } from '../dag';
 import InstanceTooltip from './InstanceTooltip';
 
 const StatusBox = ({
-  group, instance, containerRef, extraLinks = [], ...rest
+  group, instance, containerRef, extraLinks = [],
 }) => {
   const {
     executionDate, taskId, tryNumber = 0, operator, runId,
@@ -38,7 +38,7 @@ const StatusBox = ({
   const onClick = () => executionDate && callModal(taskId, executionDate, extraLinks, tryNumber, operator === 'SubDagOperator' || undefined, runId);
 
   // Fetch the corresponding column element and set its background color when hovering
-  const onMouseOver = () => {
+  const onMouseEnter = () => {
     [...containerRef.current.getElementsByClassName(`js-${runId}`)]
       .forEach((e) => { e.style.backgroundColor = 'rgba(113, 128, 150, 0.1)'; });
   };
@@ -56,28 +56,18 @@ const StatusBox = ({
       placement="top"
       openDelay={400}
     >
-      <Flex
-        p="1px"
-        my="1px"
-        mx="2px"
-        justifyContent="center"
-        alignItems="center"
+      <Box
+        width="10px"
+        height="10px"
+        backgroundColor={stateColors[instance.state] || 'white'}
+        borderRadius="2px"
+        borderWidth={instance.state ? 0 : 1}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         onClick={onClick}
         cursor={!group.children && 'pointer'}
         data-testid="task-instance"
-        zIndex={1}
-        onMouseEnter={onMouseOver}
-        onMouseLeave={onMouseLeave}
-        {...rest}
-      >
-        <Box
-          width="10px"
-          height="10px"
-          backgroundColor={stateColors[instance.state] || 'white'}
-          borderRadius="2px"
-          borderWidth={instance.state ? 0 : 1}
-        />
-      </Flex>
+      />
     </Tooltip>
   );
 };
