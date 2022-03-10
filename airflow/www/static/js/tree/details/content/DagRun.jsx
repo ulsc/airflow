@@ -36,7 +36,16 @@ import { useClearRun, useMarkFailedRun, useMarkSuccessRun } from '../../api';
 
 const DagRun = ({
   dagRun: {
-    dagId, state, runId, duration, dataIntervalStart, dataIntervalEnd, startDate, endDate, runType,
+    dagId,
+    state,
+    runId,
+    duration,
+    dataIntervalStart,
+    dataIntervalEnd,
+    startDate,
+    endDate,
+    runType,
+    lastSchedulingDecision,
   },
 }) => {
   const { mutate: onClear, isLoading: isClearLoading } = useClearRun(dagId, runId);
@@ -80,6 +89,13 @@ const DagRun = ({
         {' '}
         {formatDuration(duration)}
       </Text>
+      {lastSchedulingDecision && (
+      <Text>
+        Last Scheduling Decision:
+        {' '}
+        {formatDateTime(lastSchedulingDecision)}
+      </Text>
+      )}
       <br />
       <Text as="strong">Data Interval:</Text>
       <Text>
